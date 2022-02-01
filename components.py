@@ -83,7 +83,7 @@ def get_components_history(index: str = 'SPX', start_date=None, end_date=None, f
     historical_components = {}
     for date in dates:
         components_at_date = get_components_at(index=index, when=date)
-        historical_components[str(date)] = [list(components_at_date.index)] # wrapping in extra list is hack to convert to df when lists are different lengths
+        historical_components[str(date)] = list(components_at_date.index) 
     return historical_components
 
 if __name__ == '__main__':
@@ -94,11 +94,8 @@ if __name__ == '__main__':
     sp500_2015 = get_components_at(index='SPX', when='2018-10-01')
     print(sp500_2015.index, flush=True)
     print('Get historical components monthly since 2008') # before then, the list was not in table format
-    sp500_monthly = get_components_history(index='SPX', start_date='2008-01-01', freq='M')
-    #print(sp500_monthly)
-    sp500_monthly = pd.DataFrame(sp500_monthly).transpose() #.set_index(0)
-    sp500_monthly.rename(columns={'0': 'date'})
-    #sp500_monthly.index.name = 'date'
+    sp500_monthly = get_components_history(index='SPX', start_date='2020-01-01', freq='M')
+    sp500_monthly = pd.DataFrame.from_dict(sp500_monthly, orient='index')
     sp500_monthly.to_csv('sp500_monthly.csv')
 
 
