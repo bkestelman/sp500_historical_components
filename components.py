@@ -1,3 +1,10 @@
+"""
+Use MediaWiki Revisions API to get historical index components according to the 
+revision at a particular date.
+
+MediaWiki Revisions API: https://www.mediawiki.org/wiki/API:Revisions
+Wikipedia List of S&P500 Companies: https://en.wikipedia.org/wiki/List_of_S%26P_500_companies 
+"""
 import pandas as pd
 import requests
 import urllib.parse
@@ -7,7 +14,20 @@ wikipedia_pages = {
     'SPX': 'List of S&P 500 companies'
 }
 
-def get_revision_metadata(page, start_date=None, end_date=None, S=requests.Session(), **kwargs):
+def get_revision_metadata(page: str, start_date=None, end_date=None, S=requests.Session(), **kwargs):
+    """Get metadata for revision(s) using MediaWiki API
+
+    Args:
+        page: page title
+        start_date: get revisions after this date. Default = None
+        end_date: get revisions before this date. Default = None
+        S: HTTP session to use. Default = requests.Session()
+        kwargs: additional params to pass to the MediaWiki API query. See https://www.mediawiki.org/wiki/API:Revisions
+
+    Returns:
+        Revision(s) metadata
+        TODO: don't just return one result
+    """
     URL = "https://en.wikipedia.org/w/api.php"
     PARAMS = {
         "action": "query",
@@ -35,15 +55,15 @@ def get_revision_metadata(page, start_date=None, end_date=None, S=requests.Sessi
     DATA = R.json()
     print('Response:', DATA, flush=True)
     PAGES = DATA["query"]["pages"]
-    revision = PAGES[0]['revisions'][0]
+    revision = PAGES[0]['revisions'][0] #TODO: don't just return one result 
     return revision
 
 def get_components_at(index: str = 'SPX', when: str = None):
-    """
-    Returns index components at a given date, according to the latest update on Wikipedia before the given date.
+    """Returns index components at a given date, according to the latest update on Wikipedia before that date.
+
     Args:
-        index (str): The index to get components for. Currently only 'SPX' is supported. Default = 'SPX'.
-        when (str): The date when to search components. Default = today
+        index: The index to get components for. Currently only 'SPX' is supported. Default = 'SPX'
+        when: The date when to search components. Default = today
     """
     if when is None:
         when = datetime.datetime.today()
@@ -69,13 +89,13 @@ def get_components_at(index: str = 'SPX', when: str = None):
     return df.sort_index()
 
 def get_components_history(index: str = 'SPX', start_date=None, end_date=None, freq='M'):
-    """
-    Get a list of historical components between start_date and end_date at the given frequency (e.g. monthly)
+    """Get the historical components between start_date and end_date at a given frequency (e.g. monthly)
+
     Args:
-        index (str):
+        index: The index to get components for. Default = 'SPX'
         start_date:
         end_date:
-        freq (str): pandas frequency string (https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases)
+        freq: pandas frequency string (https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases)
     """
     if end_date is None:
         end_date = datetime.date.today()
