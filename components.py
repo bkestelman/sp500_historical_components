@@ -94,7 +94,7 @@ if __name__ == '__main__':
     sp500_2015 = get_components_at(index='SPX', when='2018-10-01')
     print(sp500_2015.index, flush=True)
     print('Get historical components monthly since 2008') # before then, the list was not in table format
-    sp500_monthly = get_components_history(index='SPX', start_date='2020-01-01', freq='M')
+    sp500_monthly = get_components_history(index='SPX', start_date='2008-01-01', freq='M')
     sp500_monthly = pd.DataFrame.from_dict(sp500_monthly, orient='index')
     sp500_monthly.to_csv('sp500_monthly.csv')
 
