@@ -66,7 +66,7 @@ def get_components_at(index: str = 'SPX', when: str = None):
             df = df.set_index('Ticker symbol')
             df.index.name = 'Symbol'
             break
-    return df
+    return df.sort_index()
 
 def get_components_history(index: str = 'SPX', start_date=None, end_date=None, freq='M'):
     """
@@ -83,7 +83,7 @@ def get_components_history(index: str = 'SPX', start_date=None, end_date=None, f
     historical_components = {}
     for date in dates:
         components_at_date = get_components_at(index=index, when=date)
-        historical_components[str(date)] = list(components_at_date.index) 
+        historical_components[str(date)] = list(components_at_date.index)
     return historical_components
 
 if __name__ == '__main__':
