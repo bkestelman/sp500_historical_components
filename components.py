@@ -14,7 +14,7 @@ wikipedia_pages = {
     'SPX': 'List of S&P 500 companies'
 }
 
-def get_revision_metadata(page: str, start_date=None, end_date=None, S=requests.Session(), **kwargs):
+def get_revision_metadata(page: str, start_date=None, end_date=None, S=requests.Session(), rvlimit=1, **kwargs):
     """Get metadata for revision(s) using MediaWiki API
 
     Args:
@@ -37,7 +37,7 @@ def get_revision_metadata(page: str, start_date=None, end_date=None, S=requests.
         "rvslots": "main",
         "formatversion": "2",
         "format": "json",
-        "rvlimit": 1,
+        "rvlimit": rvlimit,
         'rvdir': 'newer', # consistent with the intuitive notion start_date < end_date, useful if we want to get the oldest revision after some date
         # 'rvdir': 'older', # useful if we want to get the newest revision before some date
     }
@@ -55,8 +55,10 @@ def get_revision_metadata(page: str, start_date=None, end_date=None, S=requests.
     DATA = R.json()
     print('Response:', DATA, flush=True)
     PAGES = DATA["query"]["pages"]
-    revision = PAGES[0]['revisions'][0] #TODO: don't just return one result 
-    return revision
+    revisions = PAGES[0]['revisions']
+    if rvlimit == 1:
+        revisions = revisions[0]
+    return revisions
 
 def get_components_at(index: str = 'SPX', when: str = None):
     """Returns index components at a given date, according to the latest update on Wikipedia before that date.
