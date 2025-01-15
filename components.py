@@ -18,8 +18,10 @@ from utils import isoformat
 wikipedia_pages = {
     'SPX': 'List of S&P 500 companies'
 }
+wikipedia_api_url = "https://en.wikipedia.org/w/api.php"
+wikipedia_page_url_base = "https://en.wikipedia.org/w/index.php"
 
-def get_revisions_metadata(page: str, rvstart=None, rvend=None, rvdir: str = 'newer', rvlimit: int = 1, S=requests.Session(), **kwargs) -> List[Dict]:
+def get_revisions_metadata(page_title: str, rvstart=None, rvend=None, rvdir: str = 'newer', rvlimit: int = 1, S=requests.Session(), **kwargs) -> List[Dict]:
     """Get metadata for revision(s) using MediaWiki API
 
     Args:
@@ -36,11 +38,10 @@ def get_revisions_metadata(page: str, rvstart=None, rvend=None, rvdir: str = 'ne
     Returns:
         Revision(s) metadata
     """
-    api_url = "https://en.wikipedia.org/w/api.php"
     query_params = {
         "action": "query",
         "prop": "revisions",
-        "titles": page,
+        "titles": page_title,
         "rvprop": "ids|timestamp|user|comment",
         "rvslots": "main",
         "formatversion": "2",
@@ -58,11 +59,13 @@ def get_revisions_metadata(page: str, rvstart=None, rvend=None, rvdir: str = 'ne
         query_params[k] = v
     print('query_params')
     print(query_params)
-    r = S.get(url=api_url, params=query_params)
+    r = S.get(url=wikipedia_api_url, params=query_params)
     data = r.json()
     print('response:', data, flush=True)
     pages = data["query"]["pages"]
     revisions = pages[0]['revisions']
+    print('revision')
+    print(revisions)
     return revisions
 
 def get_index_components_at(index: str = 'SPX', when: str = None) -> pd.DataFrame:
@@ -81,7 +84,7 @@ def get_index_components_at(index: str = 'SPX', when: str = None) -> pd.DataFram
     revisions = get_revisions_metadata(page, rvdir='older', rvstart=when) # get latest revision before 'when'
     revision = revisions[0]
     print(f"Got results from {revision['timestamp']}")
-    table = pd.read_html(f"https://en.wikipedia.org/w/index.php?title={urllib.parse.quote(page)}&oldid={revision['revid']}")
+    table = pd.read_html(f"{wikipedia_page_url_base}?title={urllib.parse.quote(page)}&oldid={revision['revid']}")
     #components_df = table[0]
     for df in table: # usually the components df will be table[0], but sometimes there is a table before that just holds comments about the article, which we ignore.
         if 'Symbol' in df.columns:

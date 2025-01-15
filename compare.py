@@ -1,5 +1,6 @@
 """
-Compare our components to fja05680's
+Compare our components to fja05680's which is based on the list of selected
+changes
 """
 import pandas as pd
 from datetime import date
