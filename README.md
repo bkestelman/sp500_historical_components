@@ -1,6 +1,8 @@
 # sp500_historical_components
 Historical components of the S&amp;P500 and other indexes.
 
+Check out my tutorial on how this works: https://medium.com/@beni.kestel001/how-to-get-historical-s-p-500-components-using-wikipedias-api-8ef58f657c4f
+
 Many sources give the current components of the S&amp;P500, but the historical components are hard to find for free. At the same time, many blogs show how to get the current components yourself from Wikipedia, but for historical components they rely on Wikipedia's list of selected changes, which is far from complete. 
 
 Here, we fill this gap by looking at Wikipedia's revision history to get the historical components. 
