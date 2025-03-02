@@ -1,7 +1,7 @@
 altgraph @ file:///AppleInternal/Library/BuildRoots/2c89a47b-9dd5-11ef-938f-6e654a286000/Library/Caches/com.apple.xbs/Sources/python3/altgraph-0.17.2-py2.py3-none-any.whl
 beautifulsoup4==4.12.3
 blinker==1.8.2
-certifi==2024.6.2
+certifi==2024.7.4
 charset-normalizer==3.3.2
 click==8.1.7
 Flask==3.0.3
@@ -13,7 +13,7 @@ html5lib==1.1
 idna==3.7
 importlib_metadata==8.0.0
 itsdangerous==2.2.0
-Jinja2==3.1.4
+Jinja2==3.1.5
 lxml==5.3.0
 macholib @ file:///AppleInternal/Library/BuildRoots/2c89a47b-9dd5-11ef-938f-6e654a286000/Library/Caches/com.apple.xbs/Sources/python3/macholib-1.15.2-py2.py3-none-any.whl
 MarkupSafe==2.1.5
@@ -30,5 +30,5 @@ typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
 webencodings==0.5.1
-Werkzeug==3.0.3
+Werkzeug==3.0.6
 zipp==3.19.2
